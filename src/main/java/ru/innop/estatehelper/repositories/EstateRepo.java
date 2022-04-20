@@ -1,6 +1,9 @@
 package main.java.ru.innop.estatehelper.repositories;
 
 import main.java.ru.innop.estatehelper.model.Estate;
+import main.java.ru.innop.estatehelper.model.User;
+
+import java.util.List;
 
 public interface EstateRepo {
     void saveEstate(Estate estate);
@@ -12,4 +15,6 @@ public interface EstateRepo {
     void deleteEstate(Estate estate);
 
     void updateEstate(Estate estate);
+
+    List<Estate> findAllBySeller(User seller);
 }

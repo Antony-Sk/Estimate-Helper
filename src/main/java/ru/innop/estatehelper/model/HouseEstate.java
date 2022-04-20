@@ -41,7 +41,6 @@ public class HouseEstate extends Estate {
     @Override
     public String toString() {
         return "HouseEstate{" +
-                "id=" + id +
                 ", description='" + description + '\'' +
                 ", seller=" + seller +
                 ", type=" + type +
