@@ -4,6 +4,8 @@ import main.java.ru.innop.estatehelper.model.Estate;
 import main.java.ru.innop.estatehelper.model.User;
 import main.java.ru.innop.estatehelper.repositories.EstateRepo;
 
+import java.util.List;
+
 public class EstateServiceImpl implements EstateService {
     private final EstateRepo estateRepo;
 
@@ -27,5 +29,10 @@ public class EstateServiceImpl implements EstateService {
     public void updateEstate(Estate estate) {
         // log
         estateRepo.updateEstate(estate);
+    }
+
+    @Override
+    public List<Estate> getEstatesBySeller(User user) {
+        return estateRepo.findAllBySeller(user);
     }
 }

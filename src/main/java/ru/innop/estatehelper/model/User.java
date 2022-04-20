@@ -59,6 +59,8 @@ public class User {
     public String toString() {
         return "User{" +
                 "login='" + login + '\'' +
+                ", contactNumber='" + contactNumber + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 }

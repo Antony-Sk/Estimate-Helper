@@ -31,8 +31,8 @@ public class HouseEstate extends Estate {
         this.countOfRooms = countOfRooms;
     }
 
-    public HouseEstate(String description, User seller, Integer countOfRooms, String address, Integer spaceAmount) {
-        super(description, seller, EstateType.HOUSE);
+    public HouseEstate(String description, User seller, String address, Integer countOfRooms, Integer spaceAmount) {
+        super(description, seller, EstateType.HOUSE, address);
         this.countOfRooms = countOfRooms;
         this.address = address;
         this.spaceAmount = spaceAmount;
@@ -41,7 +41,6 @@ public class HouseEstate extends Estate {
     @Override
     public String toString() {
         return "HouseEstate{" +
-                "id=" + id +
                 ", description='" + description + '\'' +
                 ", seller=" + seller +
                 ", type=" + type +
