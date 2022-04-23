@@ -1,6 +1,6 @@
 package main.java.ru.innop.estatehelper.model;
 
-public class Villa extends Estate {
+public class VillaEstate extends Estate {
     private int numberOfPools;
     private boolean bowling;
     private int numberOfHelicopters;
@@ -29,7 +29,7 @@ public class Villa extends Estate {
         this.numberOfPools = numberOfPools;
     }
 
-    public Villa(String description, User seller, String address, Double price, int numberOfPools, boolean bowling, int numberOfHelicopters) {
+    public VillaEstate(String description, User seller, String address, Double price, int numberOfPools, boolean bowling, int numberOfHelicopters) {
         super(description, seller, EstateType.VILLA, address, price);
         this.bowling = bowling;
         this.numberOfHelicopters = numberOfHelicopters;

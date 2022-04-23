@@ -5,6 +5,7 @@ import main.java.ru.innop.estatehelper.factory.EstateFactory;
 import main.java.ru.innop.estatehelper.factory.EstateFlatFactory;
 import main.java.ru.innop.estatehelper.factory.EstateHouseFactory;
 import main.java.ru.innop.estatehelper.factory.EstateVillaFactory;
+import main.java.ru.innop.estatehelper.model.Estate;
 import main.java.ru.innop.estatehelper.model.EstateType;
 import main.java.ru.innop.estatehelper.model.User;
 import main.java.ru.innop.estatehelper.repositories.EstateRepo;
@@ -193,6 +194,12 @@ public class ConsoleInputHandler {
                     continue;
                 }
                 case "buy-estate": {
+                    System.out.println("All estates : ");
+                    for (Estate e : estateRepo.findAll()) {
+
+                    }
+                    System.out.println(estateRepo.findAll());
+
 
                     currentState = "menu";
                     continue;
