@@ -174,31 +174,44 @@ public class ConsoleInputHandler {
                 case "sell-estate": {
                     System.out.print("Please write type of estate: (house, villa, flat)");
                     String input = reader.readLine();
-                    System.out.print("Please write description of the estate: ");
-                    String description = reader.readLine();
-                    System.out.print("Please write address of the estate: ");
-                    String address = reader.readLine();
-                    Double price = tryInputDouble("Please write the price of the estate in rubbles: ");
                     try {
                         switch (input) {
                             case "house": {
+                                System.out.print("Please write description of the estate: ");
+                                String description = reader.readLine();
+                                System.out.print("Please write address of the estate: ");
+                                String address = reader.readLine();
+                                Double price = tryInputDouble("Please write the price of the estate in rubbles: ");
                                 Integer countOfRoom = tryInputInt("Write count of rooms : ");
                                 Integer space = tryInputInt("Write count of amount of space (in square foots) : ");
                                 estateRepo.saveEstate(houseFactory.createEstate(description, userRepo.findUserByLogin(login), address, price, countOfRoom, space));
                                 break;
                             }
                             case "flat": {
+                                System.out.print("Please write description of the estate: ");
+                                String description = reader.readLine();
+                                System.out.print("Please write address of the estate: ");
+                                String address = reader.readLine();
+                                Double price = tryInputDouble("Please write the price of the estate in rubbles: ");
                                 Integer num = tryInputInt("Write number of residents in the flat : ");
                                 estateRepo.saveEstate(flatFactory.createEstate(description, userRepo.findUserByLogin(login), address, price, num));
                                 break;
                             }
                             case "villa": {
+                                System.out.print("Please write description of the estate: ");
+                                String description = reader.readLine();
+                                System.out.print("Please write address of the estate: ");
+                                String address = reader.readLine();
+                                Double price = tryInputDouble("Please write the price of the estate in rubbles: ");
                                 Integer numOfPools = tryInputInt("Write number of pools : ");
                                 Boolean hasBowling = tryInputBool("Write existing of pool (true / false) : ");
                                 Integer numOfHelicopters = tryInputInt("Write number of helicopters in the villa : ");
-
                                 estateRepo.saveEstate(villaFactory.createEstate(description, userRepo.findUserByLogin(login), address, price, numOfPools, hasBowling, numOfHelicopters));
                                 break;
+                            }
+                            default: {
+                                System.out.println("Unknown type. Retry");
+                                continue;
                             }
                         }
                         System.out.println("New estate added");
