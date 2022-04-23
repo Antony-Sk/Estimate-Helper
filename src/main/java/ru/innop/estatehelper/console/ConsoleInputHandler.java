@@ -1,12 +1,10 @@
 package main.java.ru.innop.estatehelper.console;
 
-import main.java.ru.innop.estatehelper.exceptions.RepeatPrimaryKeyException;
 import main.java.ru.innop.estatehelper.factory.EstateFactory;
 import main.java.ru.innop.estatehelper.factory.EstateFlatFactory;
 import main.java.ru.innop.estatehelper.factory.EstateHouseFactory;
 import main.java.ru.innop.estatehelper.factory.EstateVillaFactory;
 import main.java.ru.innop.estatehelper.model.Estate;
-import main.java.ru.innop.estatehelper.model.EstateType;
 import main.java.ru.innop.estatehelper.model.User;
 import main.java.ru.innop.estatehelper.repositories.EstateRepo;
 import main.java.ru.innop.estatehelper.repositories.EstateRepoImpl;
@@ -131,7 +129,7 @@ public class ConsoleInputHandler {
                     Double balance = tryInputDouble("How many money do you have: ");
                     try {
                         userRepo.saveUser(new User(login, password, email, number, balance));
-                    } catch (RepeatPrimaryKeyException e) {
+                    } catch (Exception e) {
                         System.out.println("Failure. Try again");
                         continue;
                     }
