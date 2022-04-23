@@ -35,4 +35,16 @@ public class Villa extends Estate {
         this.numberOfHelicopters = numberOfHelicopters;
         this.numberOfPools = numberOfPools;
     }
+
+    @Override
+    public String toString() {
+        return "Villa : " +
+                "\n * description = '" + description + '\'' +
+                "\n * seller = " + seller +
+                "\n * address = '" + address + '\'' +
+                "\n * price = " + price +
+                "\n * numberOfPools = " + numberOfPools +
+                "\n * bowling = " + bowling +
+                "\n * numberOfHelicopters = " + numberOfHelicopters;
+    }
 }
