@@ -16,7 +16,7 @@ public class UserRepoImpl implements UserRepo {
     }
 
     public UserRepoImpl() {
-        storage.add(new User("admin", "admin", "88005553535", "KtoProchtet@tot.loh")); // Secret admin
+        storage.add(new User("admin", "admin", "88005553535", "KtoProchtet@tot.loh", Double.MAX_VALUE)); // Secret admin
     }
 
     @Override

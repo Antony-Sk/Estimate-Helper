@@ -2,7 +2,9 @@ package main.java.ru.innop.estatehelper.console;
 
 import main.java.ru.innop.estatehelper.exceptions.RepeatPrimaryKeyException;
 import main.java.ru.innop.estatehelper.factory.EstateFactory;
-import main.java.ru.innop.estatehelper.factory.EstateFactoryImpl;
+import main.java.ru.innop.estatehelper.factory.EstateFlatFactory;
+import main.java.ru.innop.estatehelper.factory.EstateHouseFactory;
+import main.java.ru.innop.estatehelper.factory.EstateVillaFactory;
 import main.java.ru.innop.estatehelper.model.EstateType;
 import main.java.ru.innop.estatehelper.model.User;
 import main.java.ru.innop.estatehelper.repositories.EstateRepo;
@@ -17,7 +19,9 @@ import java.io.InputStreamReader;
 public class ConsoleInputHandler {
     private final UserRepo userRepo = new UserRepoImpl();
     private final EstateRepo estateRepo = new EstateRepoImpl();
-    private final EstateFactory estateFactory = new EstateFactoryImpl();
+    private final EstateFactory houseFactory = new EstateHouseFactory();
+    private final EstateFactory villaFactory = new EstateVillaFactory();
+    private final EstateFactory flatFactory = new EstateFlatFactory();
 
     private String lastState;
     private String currentState;
@@ -33,8 +37,8 @@ public class ConsoleInputHandler {
                     System.out.println("Hello!");
                     System.out.println("It is the Estate Helper!");
                     System.out.println("This system helps you to sell or buy property");
-                    System.out.println("If you wanna exit type \"exit\", " +
-                            "\nif you wanna login type \"login\", " +
+                    System.out.println("If you want to exit type \"exit\", " +
+                            "\nif you want to login type \"login\", " +
                             "\nif you are here for the first time, please sigh up: (type \"signup\"): ");
                     lastState = currentState;
                     currentState = reader.readLine();
@@ -46,9 +50,9 @@ public class ConsoleInputHandler {
                     break;
                 }
                 case "login": {
-                    System.out.println("If you wanna exit type \"exit\", " +
-                            "\nif you wanna return back type \"greeting\", " +
-                            "\nif you wanna continue type anything else");
+                    System.out.println("If you want to exit type \"exit\", " +
+                            "\nif you want to return back type \"greeting\", " +
+                            "\nif you want to continue type anything else");
                     String input = reader.readLine();
                     switch (input) {
                         case "exit": {
@@ -76,11 +80,11 @@ public class ConsoleInputHandler {
                     continue;
                 }
                 case "menu": {
-                    System.out.println(" * If you wanna exit, type \"exit\", " +
-                            "\n * if you wanna logout, type \"logout\"" +
-                            "\n * if you wanna add new estate, type \"add-estate\"" +
-                            "\n * if you wanna buy an estate, type \"buy-estate\"" +
-                            "\n * if you wanna see your estates, type \"look-estates\"");
+                    System.out.println(" * If you want to exit, type \"exit\", " +
+                            "\n * if you want to logout, type \"logout\"" +
+                            "\n * if you want to add new estate, type \"add-estate\"" +
+                            "\n * if you want to buy an estate, type \"buy-estate\"" +
+                            "\n * if you want to see your estates, type \"look-estates\"");
                     String input = reader.readLine();
                     switch (input) {
                         case "exit":
@@ -101,9 +105,9 @@ public class ConsoleInputHandler {
                     System.out.println("Wrong command. Try again");
                 }
                 case "signup": {
-                    System.out.println("If you wanna exit type \"exit\", " +
-                            "if you wanna return back type \"greeting\", " +
-                            "if you wanna continue type anything else");
+                    System.out.println("If you want to exit type \"exit\", " +
+                            "if you want to return back type \"greeting\", " +
+                            "if you want to continue type anything else");
                     String input = reader.readLine();
                     switch (input) {
                         case "exit": {
@@ -123,8 +127,9 @@ public class ConsoleInputHandler {
                     String email = reader.readLine();
                     System.out.print("Type your contact number: ");
                     String number = reader.readLine();
+                    Double balance = tryInputDouble("How many money do you have: ");
                     try {
-                        userRepo.saveUser(new User(login, password, email, number));
+                        userRepo.saveUser(new User(login, password, email, number, balance));
                     } catch (RepeatPrimaryKeyException e) {
                         System.out.println("Failure. Try again");
                         continue;
@@ -137,7 +142,7 @@ public class ConsoleInputHandler {
                 case "look-estates": {
                     System.out.println("Your estates: ");
                     System.out.println(estateRepo.findAllBySeller(userRepo.findUserByLogin(login)));
-                    System.out.println("If you wanna exit type \"exit\", if you wanna return back type \"menu\"");
+                    System.out.println("If you want to exit type \"exit\", if you want to return back type \"menu\"");
                     String input = reader.readLine();
                     switch (input) {
                         case "exit":
@@ -159,27 +164,22 @@ public class ConsoleInputHandler {
                     try {
                         switch (input) {
                             case "house": {
-                                System.out.print("Write count of rooms : ");
-                                String countOfRoom = reader.readLine();
-                                System.out.print("Write count of amount of space (in sq ft) : ");
-                                String space = reader.readLine();
-                                estateRepo.saveEstate(estateFactory.createEstate(EstateType.HOUSE, description, userRepo.findUserByLogin(login), address, price, Integer.parseInt(countOfRoom), Integer.parseInt(space)));
+                                Integer countOfRoom = tryInputInt("Write count of rooms : ");
+                                Integer space = tryInputInt("Write count of amount of space (in square foots) : ");
+                                estateRepo.saveEstate(houseFactory.createEstate(description, userRepo.findUserByLogin(login), address, price, countOfRoom, space));
                                 break;
                             }
                             case "flat": {
-                                System.out.print("Write count of rooms : ");
-                                String countOfRoom = reader.readLine();
-                                System.out.print("Write count of amount of space (in sq ft) : ");
-                                String space = reader.readLine();
-                                estateRepo.saveEstate(estateFactory.createEstate(EstateType.FLAT, description, userRepo.findUserByLogin(login), address, price, Integer.parseInt(countOfRoom), Integer.parseInt(space)));
+                                Integer num = tryInputInt("Write number of people who lives in the flat : ");
+                                estateRepo.saveEstate(flatFactory.createEstate(description, userRepo.findUserByLogin(login), address, price, num));
                                 break;
                             }
                             case "villa": {
-                                System.out.print("Write count of rooms : ");
-                                String countOfRoom = reader.readLine();
-                                System.out.print("Write count of amount of space (in square foots) : ");
-                                String space = reader.readLine();
-                                estateRepo.saveEstate(estateFactory.createEstate(EstateType.VILLA, description, userRepo.findUserByLogin(login), address, price, Integer.parseInt(countOfRoom), Integer.parseInt(space)));
+                                Integer numOfPools = tryInputInt("Write number of pools : ");
+                                Boolean hasBowling = tryInputBool("Write existing of pool (true / false) : ");
+                                Integer numOfHelicopters = tryInputInt("Write number of helicopters in the villa : ");
+
+                                estateRepo.saveEstate(villaFactory.createEstate(description, userRepo.findUserByLogin(login), address, price, numOfPools, hasBowling, numOfHelicopters));
                                 break;
                             }
                         }
@@ -193,7 +193,6 @@ public class ConsoleInputHandler {
                     continue;
                 }
                 case "buy-estate": {
-                    // TODO print estates
 
                     currentState = "menu";
                     continue;
@@ -218,4 +217,34 @@ public class ConsoleInputHandler {
         }
         return res;
     }
+
+    private Integer tryInputInt(String message) {
+        int res = 0;
+        while (true) {
+            try {
+                System.out.print(message);
+                res = Integer.parseInt(reader.readLine());
+                break;
+            } catch (Exception e) {
+                System.out.println("Wrong format. Try again");
+            }
+        }
+        return res;
+    }
+
+    private Boolean tryInputBool(String message) {
+        boolean res = false;
+        while (true) {
+            try {
+                System.out.print(message);
+                res = Boolean.parseBoolean(reader.readLine());
+                break;
+            } catch (Exception e) {
+                System.out.println("Wrong format. Try again");
+            }
+        }
+        return res;
+    }
+
+
 }

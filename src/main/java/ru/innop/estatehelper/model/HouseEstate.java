@@ -3,8 +3,6 @@ package main.java.ru.innop.estatehelper.model;
 public class HouseEstate extends Estate {
     private Integer countOfRooms;
 
-    private String address;
-
     private Integer spaceAmount; // in sq ft
 
     public Integer getSpaceAmount() {
@@ -34,17 +32,16 @@ public class HouseEstate extends Estate {
     public HouseEstate(String description, User seller, String address, Double price, Integer countOfRooms, Integer spaceAmount) {
         super(description, seller, EstateType.HOUSE, address, price);
         this.countOfRooms = countOfRooms;
-        this.address = address;
         this.spaceAmount = spaceAmount;
     }
 
     @Override
     public String toString() {
         return "House : " +
-                "\n * description='" + description + '\'' +
-                "\n * seller=" + seller +
-                "\n * countOfRooms=" + countOfRooms +
-                "\n * address='" + address + '\'' +
-                "\n * spaceAmount=" + spaceAmount;
+                "\n * description = '" + description + '\'' +
+                "\n * seller = " + seller +
+                "\n * countOfRooms = " + countOfRooms +
+                "\n * address = '" + address + '\'' +
+                "\n * spaceAmount = " + spaceAmount;
     }
 }

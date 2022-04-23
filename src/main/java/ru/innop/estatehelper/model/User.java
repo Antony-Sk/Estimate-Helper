@@ -6,13 +6,23 @@ public class User {
     private String contactNumber;
     private String email;
     private UserRole role;
+    private Double balance;
 
-    public User(String login, String password, String contactNumber, String email) {
+    public User(String login, String password, String contactNumber, String email, Double balance) {
         this.login = login;
         this.password = password;
         this.contactNumber = contactNumber;
         this.email = email;
         role = UserRole.USER;
+        this.balance = balance;
+    }
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
     }
 
     public void setLogin(String login) {

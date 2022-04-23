@@ -43,4 +43,9 @@ public class EstateRepoImpl implements EstateRepo {
         }
         return res;
     }
+
+    @Override
+    public List<Estate> findAll() {
+        return storage;
+    }
 }

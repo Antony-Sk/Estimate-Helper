@@ -1,7 +1,10 @@
 package main.java.ru.innop.estatehelper.model;
 
 public class FLatEstate extends Estate {
-    public FLatEstate(String description, User seller, EstateType type, String address, Double price) {
-        super(description, seller, type, address, price);
+    private int numberOfPeopleWhoAlreadyLivesHere;
+
+    public FLatEstate(String description, User seller, String address, Double price, Integer numberOfPeopleWhoAlreadyLivesHere) {
+        super(description, seller, EstateType.FLAT, address, price);
+        this.numberOfPeopleWhoAlreadyLivesHere = numberOfPeopleWhoAlreadyLivesHere;
     }
 }

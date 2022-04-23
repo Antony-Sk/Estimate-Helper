@@ -17,4 +17,6 @@ public interface EstateRepo {
     void updateEstate(Estate estate);
 
     List<Estate> findAllBySeller(User seller);
+
+    List<Estate> findAll();
 }
