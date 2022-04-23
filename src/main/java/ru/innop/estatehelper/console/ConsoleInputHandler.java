@@ -202,14 +202,15 @@ public class ConsoleInputHandler {
                     Estate e = estateRepo.getEstateById((long) ind);
                     if (user.getBalance() >= e.getPrice()) {
                         user.setBalance(user.getBalance() - e.getPrice());
-//todo
+                        e.getSeller().setBalance(e.getSeller().getBalance() + e.getPrice());
+                        e.setSeller(user);
+                        System.out.println("Success");
+                    } else {
+                        System.out.println("Failure");
                     }
                     lastState = currentState;
                     currentState = "menu";
                     continue;
-                }
-                default: {
-                    currentState = lastState;
                 }
             }
         }
