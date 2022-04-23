@@ -101,7 +101,7 @@ public class ConsoleInputHandler {
                         case "buy-estate":
                         case "look-estates":
                         case "delete-estate":
-                        case "change-estate":
+                        case "update-estate":
                         case "sell-estate": {
                             lastState = currentState;
                             currentState = input;
@@ -267,6 +267,7 @@ public class ConsoleInputHandler {
                         continue;
                     }
                     currentState = lastState;
+                    continue;
                 }
                 case "update-estate": {
                     if (userRepo.findUserByLogin(login).getRole() == UserRole.ADMIN) {
@@ -313,6 +314,7 @@ public class ConsoleInputHandler {
                         continue;
                     }
                     currentState = lastState;
+                    continue;
                 }
 
                 default: {
