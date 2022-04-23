@@ -4,14 +4,14 @@ import main.java.ru.innop.estatehelper.factory.EstateFactory;
 import main.java.ru.innop.estatehelper.factory.EstateFlatFactory;
 import main.java.ru.innop.estatehelper.factory.EstateHouseFactory;
 import main.java.ru.innop.estatehelper.factory.EstateVillaFactory;
-import main.java.ru.innop.estatehelper.model.Estate;
-import main.java.ru.innop.estatehelper.model.User;
+import main.java.ru.innop.estatehelper.model.*;
 import main.java.ru.innop.estatehelper.repositories.EstateRepo;
 import main.java.ru.innop.estatehelper.repositories.EstateRepoImpl;
 import main.java.ru.innop.estatehelper.repositories.UserRepo;
 import main.java.ru.innop.estatehelper.repositories.UserRepoImpl;
 
 import java.io.BufferedReader;
+import java.io.Flushable;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -91,11 +91,17 @@ public class ConsoleInputHandler {
                             "\n * if you want to add new estate, type \"sell-estate\"" +
                             "\n * if you want to buy an estate, type \"buy-estate\"" +
                             "\n * if you want to see your estates, type \"look-estates\"");
+                    if (userRepo.findUserByLogin(login).getRole() == UserRole.ADMIN) {
+                        System.out.println("\n * if tou want to delete estate, type \"delete-estate\"" +
+                                "\n * if you want to change estate, type \"update-estate\"");
+                    }
                     String input = reader.readLine();
                     switch (input) {
                         case "exit":
                         case "buy-estate":
                         case "look-estates":
+                        case "delete-estate":
+                        case "change-estate":
                         case "sell-estate": {
                             lastState = currentState;
                             currentState = input;
@@ -149,7 +155,10 @@ public class ConsoleInputHandler {
                 }
                 case "look-estates": {
                     System.out.println("Your estates: ");
-                    System.out.println(estateRepo.findAllBySeller(userRepo.findUserByLogin(login)));
+                    for (int i = 0; i < estateRepo.findAllBySeller(userRepo.findUserByLogin(login)).size(); i++) {
+                        Estate e = estateRepo.findAllBySeller(userRepo.findUserByLogin(login)).get(i);
+                        System.out.println("Number " + i + " : " + e);
+                    }
                     System.out.println("If you want to exit type \"exit\", if you want to return back type \"menu\"");
                     String input = reader.readLine();
                     switch (input) {
@@ -202,9 +211,18 @@ public class ConsoleInputHandler {
                 }
                 case "buy-estate": {
                     System.out.println("All estates : ");
+                    boolean found = false;
                     for (int i = 0; i < estateRepo.findAll().size(); i++) {
                         Estate e = estateRepo.findAll().get(i);
-                        System.out.println("Number " + i + " : " + e);
+                        if (!e.getSeller().getLogin().equals(login)) {
+                            System.out.println("Number " + i + " : " + e);
+                            found = true;
+                        }
+                    }
+                    if (!found) {
+                        System.out.println("Nothing to buy!");
+                        currentState = "menu";
+                        continue;
                     }
                     User user = userRepo.findUserByLogin(login);
                     int ind = tryInputInt("Please write a number of the estate you want to buy : ");
@@ -221,6 +239,68 @@ public class ConsoleInputHandler {
                     currentState = "menu";
                     continue;
                 }
+                case "delete-estate": {
+                    if (userRepo.findUserByLogin(login).getRole() == UserRole.ADMIN) {
+                        System.out.println("All estates : ");
+                        for (int i = 0; i < estateRepo.findAll().size(); i++) {
+                            Estate e = estateRepo.findAll().get(i);
+                            System.out.println("Number " + i + " : " + e);
+                        }
+                        int ind = tryInputInt("Please write a number of the estate you want to delete : ");
+                        estateRepo.deleteEstate((long) ind);
+                        lastState = currentState;
+                        currentState = "menu";
+                        continue;
+                    }
+                    currentState = lastState;
+                }
+                case "update-estate": {
+                    if (userRepo.findUserByLogin(login).getRole() == UserRole.ADMIN) {
+                        System.out.println("All estates : ");
+                        for (int i = 0; i < estateRepo.findAll().size(); i++) {
+                            Estate e = estateRepo.findAll().get(i);
+                            System.out.println("Number " + i + " : " + e);
+                        }
+                        int ind = tryInputInt("Please write a number of the estate you want to update : ");
+                        Estate e = estateRepo.getEstateById((long) ind);
+                        estateRepo.deleteEstate((long) ind);
+
+                        System.out.print("Please write description of the estate: ");
+                        String description = reader.readLine();
+                        System.out.print("Please write address of the estate: ");
+                        String address = reader.readLine();
+                        Double price = tryInputDouble("Please write the price of the estate in rubbles: ");
+                        try {
+                            if (e instanceof HouseEstate) {
+                                Integer countOfRoom = tryInputInt("Write count of rooms : ");
+                                Integer space = tryInputInt("Write count of amount of space (in square foots) : ");
+                                estateRepo.saveEstate(houseFactory.createEstate(description, userRepo.findUserByLogin(login), address, price, countOfRoom, space));
+                                break;
+                            }
+                            if (e instanceof FLatEstate) {
+                                Integer num = tryInputInt("Write number of residents in the flat : ");
+                                estateRepo.saveEstate(flatFactory.createEstate(description, userRepo.findUserByLogin(login), address, price, num));
+                                break;
+                            }
+                            if (e instanceof VillaEstate) {
+                                Integer numOfPools = tryInputInt("Write number of pools : ");
+                                Boolean hasBowling = tryInputBool("Write existing of pool (true / false) : ");
+                                Integer numOfHelicopters = tryInputInt("Write number of helicopters in the villa : ");
+                                estateRepo.saveEstate(villaFactory.createEstate(description, userRepo.findUserByLogin(login), address, price, numOfPools, hasBowling, numOfHelicopters));
+                                break;
+                            }
+                            System.out.println("Success");
+                        } catch (Exception ex) {
+                            System.out.println("Something wrong");
+                            estateRepo.saveEstate(e);
+                        }
+                        lastState = currentState;
+                        currentState = "menu";
+                        continue;
+                    }
+                    currentState = lastState;
+                }
+
                 default: {
                     if (!isAuth)
                         currentState = "greeting";
@@ -228,6 +308,7 @@ public class ConsoleInputHandler {
                 }
             }
         }
+
     }
 
     private Double tryInputDouble(String message) {
