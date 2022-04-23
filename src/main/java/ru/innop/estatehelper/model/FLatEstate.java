@@ -1,19 +1,19 @@
 package main.java.ru.innop.estatehelper.model;
 
 public class FLatEstate extends Estate {
-    private int numberOfPeopleWhoAlreadyLivesHere;
+    private int numberOfResidents;
 
     public FLatEstate(String description, User seller, String address, Double price, Integer numberOfPeopleWhoAlreadyLivesHere) {
         super(description, seller, EstateType.FLAT, address, price);
-        this.numberOfPeopleWhoAlreadyLivesHere = numberOfPeopleWhoAlreadyLivesHere;
+        this.numberOfResidents = numberOfPeopleWhoAlreadyLivesHere;
     }
 
-    public int getNumberOfPeopleWhoAlreadyLivesHere() {
-        return numberOfPeopleWhoAlreadyLivesHere;
+    public int getNumberOfResidents() {
+        return numberOfResidents;
     }
 
-    public void setNumberOfPeopleWhoAlreadyLivesHere(int numberOfPeopleWhoAlreadyLivesHere) {
-        this.numberOfPeopleWhoAlreadyLivesHere = numberOfPeopleWhoAlreadyLivesHere;
+    public void setNumberOfResidents(int numberOfResidents) {
+        this.numberOfResidents = numberOfResidents;
     }
 
     @Override
@@ -24,6 +24,6 @@ public class FLatEstate extends Estate {
                 "\n * type = " + type +
                 "\n * address = '" + address + '\'' +
                 "\n * price = " + price +
-                "\n * number of people who already lives here = " + numberOfPeopleWhoAlreadyLivesHere;
+                "\n * number of residents = " + numberOfResidents;
     }
 }

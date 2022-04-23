@@ -195,12 +195,16 @@ public class ConsoleInputHandler {
                 }
                 case "buy-estate": {
                     System.out.println("All estates : ");
-                    for (Estate e : estateRepo.findAll()) {
-
+                    for (int i = 0; i < estateRepo.findAll().size(); i++) {
+                        Estate e = estateRepo.findAll().get(i);
+                        System.out.println("Number " + i + " : " + e);
                     }
-                    System.out.println(estateRepo.findAll());
-
-
+                    User user = userRepo.findUserByLogin(login);
+                    int ind = tryInputInt("Please write a number of the estate you want to buy : ");
+                    Estate e = estateRepo.getEstateById((long) ind);
+//                    if (user.getBalance() >= e.get)
+//todo
+                    lastState = currentState;
                     currentState = "menu";
                     continue;
                 }
