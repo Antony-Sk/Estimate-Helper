@@ -30,6 +30,7 @@ public class ConsoleInputHandler {
         currentState = lastState = "greeting";
         boolean working = true;
         String login = null;
+        boolean isAuth = false;
         while (working) {
             switch (currentState) {
                 case "greeting": {
@@ -54,7 +55,7 @@ public class ConsoleInputHandler {
                     System.out.print("Type your password: ");
                     String password = reader.readLine();
                     User user = userRepo.findUserByLogin(login);
-                    boolean isAuth = user != null && user.getPassword().equals(password);
+                    isAuth = user != null && user.getPassword().equals(password);
                     if (isAuth) {
                         System.out.println("Success. Hello " + login + "!");
                         lastState = currentState;
@@ -97,6 +98,7 @@ public class ConsoleInputHandler {
                         }
                         case "logout": {
                             lastState = currentState;
+                            isAuth = false;
                             currentState = "greeting";
                             continue;
                         }
@@ -104,20 +106,6 @@ public class ConsoleInputHandler {
                     System.out.println("Wrong command. Try again");
                 }
                 case "signup": {
-                    System.out.println("If you want to exit type \"exit\", " +
-                            "if you want to return back type \"logout\", " +
-                            "if you want to continue type anything else");
-                    String input = reader.readLine();
-                    switch (input) {
-                        case "exit": {
-                            currentState = lastState = "exit";
-                            continue;
-                        }
-                        case "logout": {
-                            currentState = lastState = "greeting";
-                            continue;
-                        }
-                    }
                     System.out.print("Type your login: ");
                     login = reader.readLine();
                     System.out.print("Type your password: ");
@@ -131,9 +119,25 @@ public class ConsoleInputHandler {
                         userRepo.saveUser(new User(login, password, email, number, balance));
                     } catch (Exception e) {
                         System.out.println("Failure. Try again");
+                        System.out.println("If you want to exit type \"exit\", " +
+                                "if you want to return back type \"logout\", " +
+                                "if you want to continue type anything else");
+                        String input = reader.readLine();
+                        switch (input) {
+                            case "exit": {
+                                currentState = lastState = "exit";
+                                continue;
+                            }
+                            case "logout": {
+                                currentState = lastState = "greeting";
+                                isAuth = false;
+                                continue;
+                            }
+                        }
                         continue;
                     }
                     System.out.println("Success. Hello " + login + "!");
+                    isAuth = true;
                     lastState = currentState;
                     currentState = "menu";
                     continue;
@@ -211,6 +215,11 @@ public class ConsoleInputHandler {
                     lastState = currentState;
                     currentState = "menu";
                     continue;
+                }
+                default: {
+                    if (!isAuth)
+                        currentState = "greeting";
+                    else currentState = "menu";
                 }
             }
         }
