@@ -4,14 +4,12 @@ public abstract class Estate {
     protected Long id;
     protected String description;
     protected User seller;
-    protected EstateType type;
     protected String address;
     protected Double price; // in rubbles
 
-    public Estate(String description, User seller, EstateType type, String address, Double price) {
+    public Estate(String description, User seller, String address, Double price) {
         this.description = description;
         this.seller = seller;
-        this.type = type;
         this.address = address;
         this.price = price;
     }
@@ -54,13 +52,5 @@ public abstract class Estate {
 
     public void setSeller(User seller) {
         this.seller = seller;
-    }
-
-    public EstateType getType() {
-        return type;
-    }
-
-    public void setType(EstateType type) {
-        this.type = type;
     }
 }

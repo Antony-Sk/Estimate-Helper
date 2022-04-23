@@ -200,7 +200,9 @@ public class ConsoleInputHandler {
                     User user = userRepo.findUserByLogin(login);
                     int ind = tryInputInt("Please write a number of the estate you want to buy : ");
                     Estate e = estateRepo.getEstateById((long) ind);
-//                    if (user.getBalance() >= e.get)
+                    if (user.getBalance() >= e.getPrice()) {
+
+                    }
 //todo
                     lastState = currentState;
                     currentState = "menu";

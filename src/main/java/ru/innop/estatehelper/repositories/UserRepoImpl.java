@@ -1,6 +1,5 @@
 package main.java.ru.innop.estatehelper.repositories;
 
-import main.java.ru.innop.estatehelper.exceptions.RepeatPrimaryKeyException;
 import main.java.ru.innop.estatehelper.model.User;
 import main.java.ru.innop.estatehelper.model.UserRole;
 
@@ -21,8 +20,6 @@ public class UserRepoImpl implements UserRepo {
 
     @Override
     public void saveUser(User user) {
-        if (findUserByLogin(user.getLogin()) != null)
-            throw new RepeatPrimaryKeyException();
         storage.add(user);
     }
 

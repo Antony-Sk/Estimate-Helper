@@ -30,7 +30,7 @@ public class HouseEstate extends Estate {
     }
 
     public HouseEstate(String description, User seller, String address, Double price, Integer countOfRooms, Integer spaceAmount) {
-        super(description, seller, EstateType.HOUSE, address, price);
+        super(description, seller, address, price);
         this.countOfRooms = countOfRooms;
         this.spaceAmount = spaceAmount;
     }

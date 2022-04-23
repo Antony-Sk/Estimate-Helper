@@ -4,7 +4,7 @@ public class FLatEstate extends Estate {
     private int numberOfResidents;
 
     public FLatEstate(String description, User seller, String address, Double price, Integer numberOfPeopleWhoAlreadyLivesHere) {
-        super(description, seller, EstateType.FLAT, address, price);
+        super(description, seller, address, price);
         this.numberOfResidents = numberOfPeopleWhoAlreadyLivesHere;
     }
 
@@ -21,7 +21,6 @@ public class FLatEstate extends Estate {
         return "FLat : " +
                 "\n * description = '" + description + '\'' +
                 "\n * seller = " + seller +
-                "\n * type = " + type +
                 "\n * address = '" + address + '\'' +
                 "\n * price = " + price +
                 "\n * number of residents = " + numberOfResidents;

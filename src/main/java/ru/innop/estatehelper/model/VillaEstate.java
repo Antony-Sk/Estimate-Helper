@@ -30,7 +30,7 @@ public class VillaEstate extends Estate {
     }
 
     public VillaEstate(String description, User seller, String address, Double price, int numberOfPools, boolean bowling, int numberOfHelicopters) {
-        super(description, seller, EstateType.VILLA, address, price);
+        super(description, seller, address, price);
         this.bowling = bowling;
         this.numberOfHelicopters = numberOfHelicopters;
         this.numberOfPools = numberOfPools;
