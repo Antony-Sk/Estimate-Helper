@@ -92,7 +92,7 @@ public class ConsoleInputHandler {
                             "\n * if you want to buy an estate, type \"buy-estate\"" +
                             "\n * if you want to see your estates, type \"look-estates\"");
                     if (userRepo.findUserByLogin(login).getRole() == UserRole.ADMIN) {
-                        System.out.println("\n * if tou want to delete estate, type \"delete-estate\"" +
+                        System.out.println("Admin panel\n * if tou want to delete estate, type \"delete-estate\"" +
                                 "\n * if you want to change estate, type \"update-estate\"");
                     }
                     String input = reader.readLine();
@@ -115,6 +115,7 @@ public class ConsoleInputHandler {
                         }
                     }
                     System.out.println("Wrong command. Try again");
+                    continue;
                 }
                 case "signup": {
                     System.out.print("Type your login: ");

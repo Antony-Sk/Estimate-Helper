@@ -17,22 +17,22 @@ public class EstateRepoImpl implements EstateRepo {
 
     @Override
     public Estate getEstateById(Long id) {
-        return null;
+        return storage.get(Math.toIntExact(id));
     }
 
     @Override
     public void deleteEstate(Long id) {
-
+        storage.remove(getEstateById(id));
     }
 
     @Override
     public void deleteEstate(Estate estate) {
-
+        storage.remove(estate);
     }
 
     @Override
     public void updateEstate(Estate estate) {
-
+        storage.set(Math.toIntExact(estate.getId()), estate);
     }
 
     @Override
