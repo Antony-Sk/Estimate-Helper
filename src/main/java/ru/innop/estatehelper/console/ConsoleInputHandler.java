@@ -49,20 +49,6 @@ public class ConsoleInputHandler {
                     break;
                 }
                 case "login": {
-                    System.out.println("If you want to exit type \"exit\", " +
-                            "\nif you want to return back type \"greeting\", " +
-                            "\nif you want to continue type anything else");
-                    String input = reader.readLine();
-                    switch (input) {
-                        case "exit": {
-                            currentState = input;
-                            continue;
-                        }
-                        case "greeting": {
-                            currentState = lastState = "greeting";
-                            continue;
-                        }
-                    }
                     System.out.print("Type your login: ");
                     login = reader.readLine();
                     System.out.print("Type your password: ");
@@ -75,6 +61,20 @@ public class ConsoleInputHandler {
                         currentState = "menu";
                     } else {
                         System.out.println("Failure. Try again");
+                        System.out.println("If you want to exit type \"exit\", " +
+                                "\nif you want to return back type \"greeting\", " +
+                                "\nif you want to continue type anything else");
+                        String input = reader.readLine();
+                        switch (input) {
+                            case "exit": {
+                                currentState = input;
+                                continue;
+                            }
+                            case "greeting": {
+                                currentState = lastState = "greeting";
+                                continue;
+                            }
+                        }
                     }
                     continue;
                 }
@@ -105,7 +105,7 @@ public class ConsoleInputHandler {
                 }
                 case "signup": {
                     System.out.println("If you want to exit type \"exit\", " +
-                            "if you want to return back type \"greeting\", " +
+                            "if you want to return back type \"logout\", " +
                             "if you want to continue type anything else");
                     String input = reader.readLine();
                     switch (input) {
@@ -113,7 +113,7 @@ public class ConsoleInputHandler {
                             currentState = lastState = "exit";
                             continue;
                         }
-                        case "greeting": {
+                        case "logout": {
                             currentState = lastState = "greeting";
                             continue;
                         }
@@ -169,7 +169,7 @@ public class ConsoleInputHandler {
                                 break;
                             }
                             case "flat": {
-                                Integer num = tryInputInt("Write number of people who lives in the flat : ");
+                                Integer num = tryInputInt("Write number of residents in the flat : ");
                                 estateRepo.saveEstate(flatFactory.createEstate(description, userRepo.findUserByLogin(login), address, price, num));
                                 break;
                             }
@@ -201,9 +201,9 @@ public class ConsoleInputHandler {
                     int ind = tryInputInt("Please write a number of the estate you want to buy : ");
                     Estate e = estateRepo.getEstateById((long) ind);
                     if (user.getBalance() >= e.getPrice()) {
-
-                    }
+                        user.setBalance(user.getBalance() - e.getPrice());
 //todo
+                    }
                     lastState = currentState;
                     currentState = "menu";
                     continue;
