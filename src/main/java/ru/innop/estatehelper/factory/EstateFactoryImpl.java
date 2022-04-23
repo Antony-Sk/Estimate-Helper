@@ -11,9 +11,9 @@ public class EstateFactoryImpl implements EstateFactory {
         Estate estate = null;
         switch (type) {
             case HOUSE:
-                estate = new HouseEstate((String) params[0], (User) params[1], (String) params[2], (Integer) params[3], (Integer) params[4]);
-            case BROKEN_PLANE: // TODO;
-            case BUSINESS_CENTRE: // TODO;
+                estate = new HouseEstate((String) params[0], (User) params[1], (String) params[2], (Double) params[3], (Integer) params[4], (Integer) params[5]);
+            case VILLA: // TODO;
+            case FLAT: // TODO;
         }
         return estate;
     }

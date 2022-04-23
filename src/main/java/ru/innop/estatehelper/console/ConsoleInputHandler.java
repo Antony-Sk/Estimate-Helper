@@ -4,15 +4,11 @@ import main.java.ru.innop.estatehelper.exceptions.RepeatPrimaryKeyException;
 import main.java.ru.innop.estatehelper.factory.EstateFactory;
 import main.java.ru.innop.estatehelper.factory.EstateFactoryImpl;
 import main.java.ru.innop.estatehelper.model.EstateType;
-import main.java.ru.innop.estatehelper.model.LoginForm;
+import main.java.ru.innop.estatehelper.model.User;
 import main.java.ru.innop.estatehelper.repositories.EstateRepo;
 import main.java.ru.innop.estatehelper.repositories.EstateRepoImpl;
 import main.java.ru.innop.estatehelper.repositories.UserRepo;
 import main.java.ru.innop.estatehelper.repositories.UserRepoImpl;
-import main.java.ru.innop.estatehelper.service.EstateService;
-import main.java.ru.innop.estatehelper.service.EstateServiceImpl;
-import main.java.ru.innop.estatehelper.service.LoginSignUpService;
-import main.java.ru.innop.estatehelper.service.LoginSignUpServiceImpl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,8 +17,6 @@ import java.io.InputStreamReader;
 public class ConsoleInputHandler {
     private final UserRepo userRepo = new UserRepoImpl();
     private final EstateRepo estateRepo = new EstateRepoImpl();
-    private final LoginSignUpService loginSignUpService = new LoginSignUpServiceImpl(userRepo);
-    private final EstateService estateService = new EstateServiceImpl(estateRepo);
     private final EstateFactory estateFactory = new EstateFactoryImpl();
 
     private String lastState;
@@ -34,12 +28,14 @@ public class ConsoleInputHandler {
         boolean working = true;
         String login = null;
         while (working) {
-            System.out.print("\033[H\033[2J");
             switch (currentState) {
                 case "greeting": {
-                    System.out.println("Hello stranger!!");
-                    System.out.println("It is the Estate Helper!!");
-                    System.out.println("If you wanna exit type \"exit\", if you wanna login type \"login\", if you are here for the first time, please sigh up: (type \"signup\"): ");
+                    System.out.println("Hello!");
+                    System.out.println("It is the Estate Helper!");
+                    System.out.println("This system helps you to sell or buy property");
+                    System.out.println("If you wanna exit type \"exit\", " +
+                            "\nif you wanna login type \"login\", " +
+                            "\nif you are here for the first time, please sigh up: (type \"signup\"): ");
                     lastState = currentState;
                     currentState = reader.readLine();
                     continue;
@@ -50,7 +46,9 @@ public class ConsoleInputHandler {
                     break;
                 }
                 case "login": {
-                    System.out.println("If you wanna exit type \"exit\", if you wanna return back type \"greeting\", if you wanna continue type anything else");
+                    System.out.println("If you wanna exit type \"exit\", " +
+                            "\nif you wanna return back type \"greeting\", " +
+                            "\nif you wanna continue type anything else");
                     String input = reader.readLine();
                     switch (input) {
                         case "exit": {
@@ -66,7 +64,8 @@ public class ConsoleInputHandler {
                     login = reader.readLine();
                     System.out.print("Type your password: ");
                     String password = reader.readLine();
-                    boolean isAuth = loginSignUpService.tryToLogin(login, password);
+                    User user = userRepo.findUserByLogin(login);
+                    boolean isAuth = user != null && user.getPassword().equals(password);
                     if (isAuth) {
                         System.out.println("Success. Hello " + login + "!");
                         lastState = currentState;
@@ -77,14 +76,14 @@ public class ConsoleInputHandler {
                     continue;
                 }
                 case "menu": {
-                    System.out.println("If you wanna exit, type \"exit\", if you wanna logout, type \"greeting\"" +
-                            "\n, if you wanna add new estate, type \"add-estate\"" +
-                            "\n, if you wanna buy an estate, type \"buy-estate\"" +
-                            "\n, if you wanna see your estates, type \"look-estates\"");
+                    System.out.println(" * If you wanna exit, type \"exit\", " +
+                            "\n * if you wanna logout, type \"logout\"" +
+                            "\n * if you wanna add new estate, type \"add-estate\"" +
+                            "\n * if you wanna buy an estate, type \"buy-estate\"" +
+                            "\n * if you wanna see your estates, type \"look-estates\"");
                     String input = reader.readLine();
                     switch (input) {
                         case "exit":
-                        case "greeting":
                         case "add-estate":
                         case "buy-estate":
                         case "look-estates":
@@ -93,11 +92,18 @@ public class ConsoleInputHandler {
                             currentState = input;
                             continue;
                         }
+                        case "logout": {
+                            lastState = currentState;
+                            currentState = "greeting";
+                            continue;
+                        }
                     }
-
+                    System.out.println("Wrong command. Try again");
                 }
                 case "signup": {
-                    System.out.println("If you wanna exit type \"exit\", if you wanna return back type \"greeting\", if you wanna continue type anything else");
+                    System.out.println("If you wanna exit type \"exit\", " +
+                            "if you wanna return back type \"greeting\", " +
+                            "if you wanna continue type anything else");
                     String input = reader.readLine();
                     switch (input) {
                         case "exit": {
@@ -118,7 +124,7 @@ public class ConsoleInputHandler {
                     System.out.print("Type your contact number: ");
                     String number = reader.readLine();
                     try {
-                        loginSignUpService.sighUpNewUser(new LoginForm(login, password, email, number));
+                        userRepo.saveUser(new User(login, password, email, number));
                     } catch (RepeatPrimaryKeyException e) {
                         System.out.println("Failure. Try again");
                         continue;
@@ -130,7 +136,7 @@ public class ConsoleInputHandler {
                 }
                 case "look-estates": {
                     System.out.println("Your estates: ");
-                    System.out.println(estateService.getEstatesBySeller(userRepo.findUserByLogin(login)));
+                    System.out.println(estateRepo.findAllBySeller(userRepo.findUserByLogin(login)));
                     System.out.println("If you wanna exit type \"exit\", if you wanna return back type \"menu\"");
                     String input = reader.readLine();
                     switch (input) {
@@ -149,6 +155,7 @@ public class ConsoleInputHandler {
                     String description = reader.readLine();
                     System.out.print("Please write address of the estate: ");
                     String address = reader.readLine();
+                    Double price = tryInputDouble("Please write the price of the estate in rubbles: ");
                     try {
                         switch (input) {
                             case "house": {
@@ -156,25 +163,38 @@ public class ConsoleInputHandler {
                                 String countOfRoom = reader.readLine();
                                 System.out.print("Write count of amount of space (in sq ft) : ");
                                 String space = reader.readLine();
-                                estateService.loginNewEstate(estateFactory.createEstate(EstateType.HOUSE, description, userRepo.findUserByLogin(login), address, Integer.parseInt(countOfRoom), Integer.parseInt(space)));
+                                estateRepo.saveEstate(estateFactory.createEstate(EstateType.HOUSE, description, userRepo.findUserByLogin(login), address, price, Integer.parseInt(countOfRoom), Integer.parseInt(space)));
+                                break;
                             }
                             case "flat": {
-                                // TODO
+                                System.out.print("Write count of rooms : ");
+                                String countOfRoom = reader.readLine();
+                                System.out.print("Write count of amount of space (in sq ft) : ");
+                                String space = reader.readLine();
+                                estateRepo.saveEstate(estateFactory.createEstate(EstateType.FLAT, description, userRepo.findUserByLogin(login), address, price, Integer.parseInt(countOfRoom), Integer.parseInt(space)));
+                                break;
                             }
                             case "villa": {
-                                // TODO
+                                System.out.print("Write count of rooms : ");
+                                String countOfRoom = reader.readLine();
+                                System.out.print("Write count of amount of space (in square foots) : ");
+                                String space = reader.readLine();
+                                estateRepo.saveEstate(estateFactory.createEstate(EstateType.VILLA, description, userRepo.findUserByLogin(login), address, price, Integer.parseInt(countOfRoom), Integer.parseInt(space)));
+                                break;
                             }
                         }
                         System.out.println("New estate added");
                         lastState = currentState;
                         currentState = "menu";
                     } catch (Exception e) {
+                        e.printStackTrace();
                         System.out.println("Something wrong");
                     }
                     continue;
                 }
                 case "buy-estate": {
-                    // TODO
+                    // TODO print estates
+
                     currentState = "menu";
                     continue;
                 }
@@ -183,5 +203,19 @@ public class ConsoleInputHandler {
                 }
             }
         }
+    }
+
+    private Double tryInputDouble(String message) {
+        double res = 0.;
+        while (true) {
+            try {
+                System.out.print(message);
+                res = Double.parseDouble(reader.readLine());
+                break;
+            } catch (Exception e) {
+                System.out.println("Wrong format. Try again");
+            }
+        }
+        return res;
     }
 }

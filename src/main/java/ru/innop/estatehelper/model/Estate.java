@@ -6,12 +6,14 @@ public abstract class Estate {
     protected User seller;
     protected EstateType type;
     protected String address;
+    protected Double price; // in rubbles
 
-    public Estate(String description, User seller, EstateType type, String address) {
+    public Estate(String description, User seller, EstateType type, String address, Double price) {
         this.description = description;
         this.seller = seller;
         this.type = type;
         this.address = address;
+        this.price = price;
     }
 
     public String getAddress() {

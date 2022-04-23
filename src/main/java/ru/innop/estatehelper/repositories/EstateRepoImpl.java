@@ -37,7 +37,7 @@ public class EstateRepoImpl implements EstateRepo {
     @Override
     public List<Estate> findAllBySeller(User seller) {
         List<Estate> res = new ArrayList<>();
-        for (Estate estate: storage) {
+        for (Estate estate : storage) {
             if (estate.getSeller().equals(seller))
                 res.add(estate);
         }

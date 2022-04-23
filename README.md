@@ -6,5 +6,5 @@ This project helps the users to make good decisions regarding buying or selling 
 Entrypoint is /src/main/java/ru/innop/estatehelper/app/Application.java method main()</br>
 Application is a console application. It gives hints during the work. It has admin with login and password "admin". 
 * First login 
-
+    </br>Enter by writing "login"
 * 
