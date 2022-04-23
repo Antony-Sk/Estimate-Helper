@@ -13,14 +13,6 @@ public class HouseEstate extends Estate {
         this.spaceAmount = spaceAmount;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public Integer getCountOfRooms() {
         return countOfRooms;
     }
@@ -38,10 +30,10 @@ public class HouseEstate extends Estate {
     @Override
     public String toString() {
         return "House : " +
-                "\n * description = '" + description + '\'' +
-                "\n * seller = " + seller +
+                "\n * description = '" + getDescription() + '\'' +
+                "\n * seller = " + getSeller() +
                 "\n * countOfRooms = " + countOfRooms +
-                "\n * address = '" + address + '\'' +
+                "\n * address = '" + getAddress() + '\'' +
                 "\n * spaceAmount = " + spaceAmount + "\n";
     }
 }

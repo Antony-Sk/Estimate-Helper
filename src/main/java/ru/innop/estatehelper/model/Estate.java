@@ -1,11 +1,11 @@
 package main.java.ru.innop.estatehelper.model;
 
 public abstract class Estate {
-    protected Long id;
-    protected String description;
-    protected User seller;
-    protected String address;
-    protected Double price; // in rubbles
+    private Long id;
+    private String description;
+    private User seller;
+    private String address;
+    private Double price; // in rubbles
 
     public Estate(String description, User seller, String address, Double price) {
         this.description = description;

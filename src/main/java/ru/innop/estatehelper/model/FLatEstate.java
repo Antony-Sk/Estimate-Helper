@@ -19,10 +19,10 @@ public class FLatEstate extends Estate {
     @Override
     public String toString() {
         return "FLat : " +
-                "\n * description = '" + description + '\'' +
-                "\n * seller = " + seller +
-                "\n * address = '" + address + '\'' +
-                "\n * price = " + price +
+                "\n * description = '" + getDescription() + '\'' +
+                "\n * seller = " + getSeller() +
+                "\n * address = '" + getAddress() + '\'' +
+                "\n * price = " + getPrice() +
                 "\n * number of residents = " + numberOfResidents + "\n";
     }
 }
