@@ -26,6 +26,12 @@ public class ConsoleInputHandler {
     private String currentState;
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
+    public ConsoleInputHandler() {
+        estateRepo.saveEstate(houseFactory.createEstate("Cool house", userRepo.findUserByLogin("admin"), "South of Hell St., 69", 999999999.99, 10, 666));
+        estateRepo.saveEstate(villaFactory.createEstate("Luxury Villa <3", userRepo.findUserByLogin("admin"), "Paradise St., 420", 420691488.22, 2, true, 100));
+        estateRepo.saveEstate(flatFactory.createEstate("Dream dorm room >3", userRepo.findUserByLogin("admin"), "Daumana St, 228", -646., 4));
+    }
+
     public void start() throws IOException {
         currentState = lastState = "greeting";
         boolean working = true;
@@ -64,7 +70,7 @@ public class ConsoleInputHandler {
                         System.out.println("Failure. Try again");
                         System.out.println("If you want to exit type \"exit\", " +
                                 "\nif you want to return back type \"greeting\", " +
-                                "\nif you want to continue type anything else");
+                                "\nif you want to retry type anything else");
                         String input = reader.readLine();
                         switch (input) {
                             case "exit": {
@@ -82,13 +88,12 @@ public class ConsoleInputHandler {
                 case "menu": {
                     System.out.println(" * If you want to exit, type \"exit\", " +
                             "\n * if you want to logout, type \"logout\"" +
-                            "\n * if you want to add new estate, type \"add-estate\"" +
+                            "\n * if you want to add new estate, type \"sell-estate\"" +
                             "\n * if you want to buy an estate, type \"buy-estate\"" +
                             "\n * if you want to see your estates, type \"look-estates\"");
                     String input = reader.readLine();
                     switch (input) {
                         case "exit":
-                        case "add-estate":
                         case "buy-estate":
                         case "look-estates":
                         case "sell-estate": {
@@ -121,7 +126,7 @@ public class ConsoleInputHandler {
                         System.out.println("Failure. Try again");
                         System.out.println("If you want to exit type \"exit\", " +
                                 "if you want to return back type \"logout\", " +
-                                "if you want to continue type anything else");
+                                "if you want to retry type anything else");
                         String input = reader.readLine();
                         switch (input) {
                             case "exit": {
@@ -156,7 +161,7 @@ public class ConsoleInputHandler {
                     }
                     continue;
                 }
-                case "add-estate": {
+                case "sell-estate": {
                     System.out.print("Please write type of estate: (house, villa, flat)");
                     String input = reader.readLine();
                     System.out.print("Please write description of the estate: ");

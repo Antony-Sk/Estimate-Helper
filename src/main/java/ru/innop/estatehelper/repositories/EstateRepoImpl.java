@@ -1,6 +1,7 @@
 package main.java.ru.innop.estatehelper.repositories;
 
 import main.java.ru.innop.estatehelper.model.Estate;
+import main.java.ru.innop.estatehelper.model.HouseEstate;
 import main.java.ru.innop.estatehelper.model.User;
 
 import java.util.ArrayList;

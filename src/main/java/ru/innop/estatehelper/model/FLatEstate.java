@@ -23,6 +23,6 @@ public class FLatEstate extends Estate {
                 "\n * seller = " + seller +
                 "\n * address = '" + address + '\'' +
                 "\n * price = " + price +
-                "\n * number of residents = " + numberOfResidents;
+                "\n * number of residents = " + numberOfResidents + "\n";
     }
 }

@@ -42,6 +42,6 @@ public class HouseEstate extends Estate {
                 "\n * seller = " + seller +
                 "\n * countOfRooms = " + countOfRooms +
                 "\n * address = '" + address + '\'' +
-                "\n * spaceAmount = " + spaceAmount;
+                "\n * spaceAmount = " + spaceAmount + "\n";
     }
 }

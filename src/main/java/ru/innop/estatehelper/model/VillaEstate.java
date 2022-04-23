@@ -45,6 +45,6 @@ public class VillaEstate extends Estate {
                 "\n * price = " + price +
                 "\n * numberOfPools = " + numberOfPools +
                 "\n * bowling = " + bowling +
-                "\n * numberOfHelicopters = " + numberOfHelicopters;
+                "\n * numberOfHelicopters = " + numberOfHelicopters + "\n";
     }
 }
