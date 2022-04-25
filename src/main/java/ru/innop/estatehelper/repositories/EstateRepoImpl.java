@@ -5,7 +5,9 @@ import main.java.ru.innop.estatehelper.model.HouseEstate;
 import main.java.ru.innop.estatehelper.model.User;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EstateRepoImpl implements EstateRepo {
     private final ArrayList<Estate> storage = new ArrayList<>();
@@ -48,5 +50,15 @@ public class EstateRepoImpl implements EstateRepo {
     @Override
     public List<Estate> findAll() {
         return storage;
+    }
+
+    @Override
+    public List<Estate> sortByPrice() {
+        return storage.stream().sorted(Comparator.comparing(Estate::getPrice)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Estate> sortByAddress() {
+        return storage.stream().sorted(Comparator.comparing(Estate::getAddress)).collect(Collectors.toList());
     }
 }

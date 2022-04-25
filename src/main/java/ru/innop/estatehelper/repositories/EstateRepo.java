@@ -19,4 +19,8 @@ public interface EstateRepo {
     List<Estate> findAllBySeller(User seller);
 
     List<Estate> findAll();
+
+    List<Estate> sortByPrice();
+
+    List<Estate> sortByAddress();
 }

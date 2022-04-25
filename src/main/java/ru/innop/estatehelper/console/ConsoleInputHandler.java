@@ -9,9 +9,9 @@ import main.java.ru.innop.estatehelper.repositories.EstateRepo;
 import main.java.ru.innop.estatehelper.repositories.EstateRepoImpl;
 import main.java.ru.innop.estatehelper.repositories.UserRepo;
 import main.java.ru.innop.estatehelper.repositories.UserRepoImpl;
+import main.java.ru.innop.estatehelper.service.CostCalculatingService;
 
 import java.io.BufferedReader;
-import java.io.Flushable;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -21,6 +21,9 @@ public class ConsoleInputHandler {
     private final EstateFactory houseFactory = new EstateHouseFactory();
     private final EstateFactory villaFactory = new EstateVillaFactory();
     private final EstateFactory flatFactory = new EstateFlatFactory();
+    private final CostCalculatingService costCalculatingService = new CostCalculatingService();
+    private String login = null;
+    private boolean isAuth = false;
 
     private String lastState;
     private String currentState;
@@ -34,10 +37,7 @@ public class ConsoleInputHandler {
 
     public void start() throws IOException {
         currentState = lastState = "greeting";
-        boolean working = true;
-        String login = null;
-        boolean isAuth = false;
-        while (working) {
+        while (true) {
             switch (currentState) {
                 case "greeting": {
                     System.out.println("Hello!");
@@ -52,8 +52,7 @@ public class ConsoleInputHandler {
                 }
                 case "exit": {
                     System.out.println("Good bye!!");
-                    working = false;
-                    break;
+                    return;
                 }
                 case "login": {
                     System.out.print("Type your login: ");
@@ -90,6 +89,7 @@ public class ConsoleInputHandler {
                             "\n * if you want to logout, type \"logout\"" +
                             "\n * if you want to add new estate, type \"sell-estate\"" +
                             "\n * if you want to buy an estate, type \"buy-estate\"" +
+                            "\n * if you want to see sorted estates by some parameter, type \"find-estate\"" +
                             "\n * if you want to see your estates, type \"look-estates\"");
                     if (userRepo.findUserByLogin(login).getRole() == UserRole.ADMIN) {
                         System.out.println("Admin panel\n * if tou want to delete estate, type \"delete-estate\"" +
@@ -102,6 +102,7 @@ public class ConsoleInputHandler {
                         case "look-estates":
                         case "delete-estate":
                         case "update-estate":
+                        case "find-estate":
                         case "sell-estate": {
                             lastState = currentState;
                             currentState = input;
@@ -181,9 +182,13 @@ public class ConsoleInputHandler {
                                 String description = reader.readLine();
                                 System.out.print("Please write address of the estate: ");
                                 String address = reader.readLine();
-                                Double price = tryInputDouble("Please write the price of the estate in rubbles: ");
                                 Integer countOfRoom = tryInputInt("Write count of rooms : ");
                                 Integer space = tryInputInt("Write count of amount of space (in square foots) : ");
+                                Double price = tryInputDouble("Please write the price of the estate in rubbles (if you want to use cost service type -1): ");
+                                if (price == -1) {
+                                    price = costCalculatingService.calculateCost();
+                                    System.out.println("Cost: " + price);
+                                }
                                 estateRepo.saveEstate(houseFactory.createEstate(description, userRepo.findUserByLogin(login), address, price, countOfRoom, space));
                                 break;
                             }
@@ -192,8 +197,12 @@ public class ConsoleInputHandler {
                                 String description = reader.readLine();
                                 System.out.print("Please write address of the estate: ");
                                 String address = reader.readLine();
-                                Double price = tryInputDouble("Please write the price of the estate in rubbles: ");
                                 Integer num = tryInputInt("Write number of residents in the flat : ");
+                                Double price = tryInputDouble("Please write the price of the estate in rubbles (if you want to use cost service type -1): ");
+                                if (price == -1) {
+                                    price = costCalculatingService.calculateCost();
+                                    System.out.println("Cost: " + price);
+                                }
                                 estateRepo.saveEstate(flatFactory.createEstate(description, userRepo.findUserByLogin(login), address, price, num));
                                 break;
                             }
@@ -202,10 +211,14 @@ public class ConsoleInputHandler {
                                 String description = reader.readLine();
                                 System.out.print("Please write address of the estate: ");
                                 String address = reader.readLine();
-                                Double price = tryInputDouble("Please write the price of the estate in rubbles: ");
                                 Integer numOfPools = tryInputInt("Write number of pools : ");
                                 Boolean hasBowling = tryInputBool("Write existing of pool (true / false) : ");
                                 Integer numOfHelicopters = tryInputInt("Write number of helicopters in the villa : ");
+                                Double price = tryInputDouble("Please write the price of the estate in rubbles (if you want to use cost service type -1): ");
+                                if (price == -1) {
+                                    price = costCalculatingService.calculateCost();
+                                    System.out.println("Cost: " + price);
+                                }
                                 estateRepo.saveEstate(villaFactory.createEstate(description, userRepo.findUserByLogin(login), address, price, numOfPools, hasBowling, numOfHelicopters));
                                 break;
                             }
@@ -315,6 +328,17 @@ public class ConsoleInputHandler {
                     }
                     currentState = lastState;
                     continue;
+                }
+                case "find-estate": {
+                    System.out.println("Write parameter you want to sort all estates (price, address): ");
+                    String input = reader.readLine();
+                    if (input.equals("price")) {
+                        System.out.println(estateRepo.sortByPrice());
+                    } else if (input.equals("address")) {
+                        System.out.println(estateRepo.sortByAddress());
+                    } else {
+                        System.out.println("wrong parameter");
+                    }
                 }
 
                 default: {

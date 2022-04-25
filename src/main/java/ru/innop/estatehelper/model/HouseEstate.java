@@ -31,6 +31,7 @@ public class HouseEstate extends Estate {
     public String toString() {
         return "House : " +
                 "\n * description = '" + getDescription() + '\'' +
+                "\n * price = '" + getPrice() + '\'' +
                 "\n * seller = " + getSeller() +
                 "\n * countOfRooms = " + countOfRooms +
                 "\n * address = '" + getAddress() + '\'' +
