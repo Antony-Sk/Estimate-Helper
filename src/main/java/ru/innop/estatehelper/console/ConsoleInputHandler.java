@@ -14,6 +14,7 @@ import main.java.ru.innop.estatehelper.service.CostCalculatingService;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DecimalFormat;
 
 public class ConsoleInputHandler {
     private final UserRepo userRepo = new UserRepoImpl();
@@ -24,6 +25,7 @@ public class ConsoleInputHandler {
     private final CostCalculatingService costCalculatingService = new CostCalculatingService();
     private String login = null;
     private boolean isAuth = false;
+    private final DecimalFormat df = new DecimalFormat("0.00");
 
     private String lastState;
     private String currentState;
@@ -243,7 +245,7 @@ public class ConsoleInputHandler {
                         Estate e = estateRepo.findAll().get(i);
                         if (!e.getSeller().getLogin().equals(login)) {
                             System.out.print("Number " + i + " : " + e);
-                            System.out.println("Price with taxes: " + e.getPrice() * 1.2 + "rubbles");
+                            System.out.print("Price with loans: " + df.format(e.getPrice() * 1.2) + " rubbles\n");
                             found = true;
                         }
                     }

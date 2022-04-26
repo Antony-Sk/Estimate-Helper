@@ -1,5 +1,7 @@
 package main.java.ru.innop.estatehelper.model;
 
+import java.text.DecimalFormat;
+
 public class VillaEstate extends Estate {
     private int numberOfPools;
     private boolean bowling;
@@ -38,11 +40,12 @@ public class VillaEstate extends Estate {
 
     @Override
     public String toString() {
+        DecimalFormat df = new DecimalFormat("0.00");
         return "Villa : " +
                 "\n * description = '" + getDescription() + '\'' +
                 "\n * seller = " + getSeller() +
                 "\n * address = '" + getAddress() + '\'' +
-                "\n * price = " + getPrice() +
+                "\n * price = " + df.format(getPrice()) + " rubbles" +
                 "\n * numberOfPools = " + numberOfPools +
                 "\n * bowling = " + bowling +
                 "\n * numberOfHelicopters = " + numberOfHelicopters + "\n";
