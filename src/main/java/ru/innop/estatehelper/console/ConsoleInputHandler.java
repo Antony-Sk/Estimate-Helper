@@ -29,10 +29,10 @@ public class ConsoleInputHandler {
     private String currentState;
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-    public ConsoleInputHandler() {
+    public ConsoleInputHandler() { // for tests
         estateRepo.saveEstate(houseFactory.createEstate("Cool house", userRepo.findUserByLogin("admin"), "South of Hell St., 69", 999999999.99, 10, 666));
         estateRepo.saveEstate(villaFactory.createEstate("Luxury Villa <3", userRepo.findUserByLogin("admin"), "Paradise St., 420", 420691488.22, 2, true, 100));
-        estateRepo.saveEstate(flatFactory.createEstate("Dream dorm room >3", userRepo.findUserByLogin("admin"), "Daumana St, 228", -646., 4));
+        estateRepo.saveEstate(flatFactory.createEstate("Dream dorm room >3", userRepo.findUserByLogin("admin"), "Daumana St, 228", 646., 4));
     }
 
     public void start() throws IOException {
@@ -184,7 +184,7 @@ public class ConsoleInputHandler {
                                 String address = reader.readLine();
                                 Integer countOfRoom = tryInputInt("Write count of rooms : ");
                                 Integer space = tryInputInt("Write count of amount of space (in square foots) : ");
-                                Double price = tryInputDouble("Please write the price of the estate in rubbles (if you want to use cost service type -1): ");
+                                Double price = tryInputDouble("Please write the price of the estate in rubbles (if you want to use cost calculator then write -1): ");
                                 if (price == -1) {
                                     price = costCalculatingService.calculateCost();
                                     System.out.println("Cost: " + price);
@@ -237,12 +237,13 @@ public class ConsoleInputHandler {
                     continue;
                 }
                 case "buy-estate": {
-                    System.out.println("All estates : ");
+                    System.out.println("All available estates : ");
                     boolean found = false;
                     for (int i = 0; i < estateRepo.findAll().size(); i++) {
                         Estate e = estateRepo.findAll().get(i);
                         if (!e.getSeller().getLogin().equals(login)) {
-                            System.out.println("Number " + i + " : " + e);
+                            System.out.print("Number " + i + " : " + e);
+                            System.out.println("Price with taxes: " + e.getPrice() * 1.2 + "rubbles");
                             found = true;
                         }
                     }
@@ -254,9 +255,9 @@ public class ConsoleInputHandler {
                     User user = userRepo.findUserByLogin(login);
                     int ind = tryInputInt("Please write a number of the estate you want to buy : ");
                     Estate e = estateRepo.getEstateById((long) ind);
-                    if (user.getBalance() >= e.getPrice()) {
-                        user.setBalance(user.getBalance() - e.getPrice());
-                        e.getSeller().setBalance(e.getSeller().getBalance() + e.getPrice());
+                    if (user.getBalance() >= e.getPrice() * 1.2) {
+                        user.setBalance(user.getBalance() - e.getPrice() * 1.2);
+                        e.getSeller().setBalance(e.getSeller().getBalance() + e.getPrice() * 1.2);
                         e.setSeller(user);
                         System.out.println("Success");
                     } else {
@@ -333,9 +334,13 @@ public class ConsoleInputHandler {
                     System.out.println("Write parameter you want to sort all estates (price, address): ");
                     String input = reader.readLine();
                     if (input.equals("price")) {
-                        System.out.println(estateRepo.sortByPrice());
+                        for (Estate e : estateRepo.sortByPrice()) {
+                            System.out.println(e);
+                        }
                     } else if (input.equals("address")) {
-                        System.out.println(estateRepo.sortByAddress());
+                        for (Estate e : estateRepo.sortByAddress()) {
+                            System.out.println(e);
+                        }
                     } else {
                         System.out.println("wrong parameter");
                     }
