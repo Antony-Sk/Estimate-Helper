@@ -1,5 +1,7 @@
 package main.java.ru.innop.estatehelper.model;
 
+import java.text.DecimalFormat;
+
 public class FLatEstate extends Estate {
     private int numberOfResidents;
 
@@ -18,11 +20,12 @@ public class FLatEstate extends Estate {
 
     @Override
     public String toString() {
+        DecimalFormat df = new DecimalFormat("0.00");
         return "FLat : " +
                 "\n * description = '" + getDescription() + '\'' +
                 "\n * seller = " + getSeller() +
                 "\n * address = '" + getAddress() + '\'' +
-                "\n * price = " + getPrice() +
+                "\n * price = " + df.format(getPrice()) + " rubbles" +
                 "\n * number of residents = " + numberOfResidents + "\n";
     }
 }
